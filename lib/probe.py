@@ -78,5 +78,10 @@ class Probe(Greenlet):
             self.state = self.STATE_CLOSED
         except socket.timeout:
             self.state = self.STATE_FILTERED
+        except OSError as e:
+            if e.errno == 113: # No route to host
+                self.state = self.STATE_FILTERED
+            else:
+                raise e
         finally:        
             sock.close()

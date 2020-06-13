@@ -81,6 +81,8 @@ class Probe(Greenlet):
         except OSError as e:
             if e.errno == 113: # No route to host
                 self.state = self.STATE_FILTERED
+            elif e.errno == 101: # Network is unreachable
+                self.state = self.STATE_FILTERED
             else:
                 raise e
         finally:        
